@@ -1,5 +1,5 @@
 import React from 'react';
-import ListGroup from 'react-bootstrap/ListGroup';
+import Table from 'react-bootstrap/Table';
 
 const beneficiaries = [
   {
@@ -27,9 +27,34 @@ const campaign = {
 class BeneficiariesList extends React.Component {
   render() {
     return (
-      <ListGroup>
-        {campaign.beneficiaries.map((beneficiary) => <ListGroup.Item>{beneficiary.name}</ListGroup.Item>)}
-      </ListGroup>
+      <Table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.beneficiaries && this.props.beneficiaries.map((beneficiary) => (
+            <tr key={Math.random()}>
+              <td>
+                {beneficiary.id}
+              </td>
+              <td>
+                {beneficiary.name}
+              </td>
+              <td>
+                {beneficiary.surname}
+              </td>
+              <td>
+                {beneficiary.dni}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     )
   }
 }
