@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import BeneficiariesList from '../Components/BeneficiariesList';
 import NewBeneficiaryModal from '../Components/NewBeneficiaryModal';
+import ActivationModal from '../Components/ActivationModal';
 
 const beneficiaries = [
   {
@@ -35,11 +36,13 @@ class CampaignEdit extends React.Component {
     super(props);
     this.state = {
       showModal: false,
+      showActivationModal: false,
       campaign: {},
     };
     this.openAddBeneficiary = this.openAddBeneficiary.bind(this);
     this.addBeneficiary = this.addBeneficiary.bind(this);
     this.activate = this.activate.bind(this);
+    this.showActivateModal = this.showActivateModal.bind(this);
   }
 
   componentDidMount() {
@@ -57,8 +60,13 @@ class CampaignEdit extends React.Component {
     this.setState({ campaign: campaignCopy });
   }
 
-  activate() {
+  showActivateModal() {
+    this.setState({ showActivationModal: true });
     //TODO: do api call to activate campaign
+  }
+  
+  activate() {
+    //TODO: do API call
   }
 
   render() {
@@ -77,12 +85,13 @@ class CampaignEdit extends React.Component {
           <Col md="9"></Col>
           <Col md="3">
             <ButtonGroup>
-              <Button variant="primary" onClick={this.activate}>Activar</Button>
+              <Button variant="primary" onClick={this.showActivateModal}>Activar</Button>
               <Button variant="danger">Cancelar</Button>
             </ButtonGroup>
           </Col>
         </Row> 
         <NewBeneficiaryModal show={this.state.showModal} addBeneficiary={this.addBeneficiary}/>
+        <ActivationModal show={this.state.showActivationModal} campaign={this.state.campaign} activate={this.activate} />
       </Container>
     );
   }
