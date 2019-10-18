@@ -83,7 +83,7 @@ class CampaignEdit extends React.Component {
 
   render() {
     return (
-      <Container>
+      <Container className="campaign-edit">
         <Row>
           <Col md="10"></Col>
           <Col md="2">
