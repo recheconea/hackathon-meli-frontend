@@ -1,7 +1,13 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import {
+  withRouter
+} from 'react-router-dom'
 
 class CampaignList extends React.Component {
+  goToCampaign(id) {
+    this.props.history.push(`/campaign/${id}`);
+  }
   render() {
     return (
       <Table>
@@ -14,10 +20,10 @@ class CampaignList extends React.Component {
         </thead>
         <tbody>
           {this.props.campaigns.map((campaign) => (
-            <tr>
+            <tr onClick={() => this.goToCampaign(campaign.id)}>
               <td>{campaign.id}</td>
               <td>{campaign.detail}</td>
-              <td>{campaign.amount}</td>
+              <td>{campaign.goal_amount}</td>
             </tr>
           ))}
         </tbody>
@@ -26,4 +32,4 @@ class CampaignList extends React.Component {
   }
 }
 
-export default CampaignList;
+export default withRouter(CampaignList);

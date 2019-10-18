@@ -7,6 +7,9 @@ import Button from 'react-bootstrap/Button';
 import InvitationModal from '../Components/InviteModal';
 import ContributorsList from '../Components/ContributorsList';
 import Axios from 'axios';
+import {
+  withRouter
+} from 'react-router-dom'
 
 class CampaignNew extends React.Component {
   constructor(props) {
@@ -14,13 +17,18 @@ class CampaignNew extends React.Component {
     this.state = {
       contributors: [],
       id: '',
-      description: '',
+      detail: '',
       amount: '',
+      name: '',
+      goal_amount: ''
     }
 
     this.openInvitationModal = this.openInvitationModal.bind(this);
     this.invite = this.invite.bind(this);
     this.save = this.save.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleGoalAmountChange = this.handleGoalAmountChange.bind(this);
+    this.handleDetailChange = this.handleDetailChange.bind(this);
   }
 
   openInvitationModal() {
@@ -35,13 +43,30 @@ class CampaignNew extends React.Component {
 
   save() {
     const payload = {
-      id: this.state.id,
-      description: this.state.description,
-      amount: this.state.amount,
+      name: this.state.name,
+      detail: this.state.detail,
+      goal_amount: this.state.goal_amount,
     }
-    Axios.post('localhost:8080/campaigns/', payload).then((response) => {
-      this.props.history.push('/campaign/');
+    Axios.post('http://80cf2514.ngrok.io/campaigns/', payload).then((response) => {
+      const contributorsData = {
+        campaign_id: response.data.id,
+        contacts: this.state.contributors
+      }
+      Axios.post('/notifications/email/new-campaign', contributorsData);
+      this.props.history.push(`/campaign/?campaign_id=${response.data.id}`);
     })
+  }
+
+  handleNameChange(event) {
+    this.setState({ name: event.target.value });
+  }
+
+  handleDetailChange(event) {
+    this.setState({ detail: event.target.value });
+  }
+
+  handleGoalAmountChange(event) {
+    this.setState({ goal_amount: event.target.value });
   }
 
   render() {
@@ -58,18 +83,18 @@ class CampaignNew extends React.Component {
             <Form>
               <Form.Group>
                 <Form.Label>Id de causa</Form.Label>
-                <Form.Control type="text" placeholder="Ingresa el ID" />
+                <Form.Control type="text" placeholder="Ingresa el ID"  value={this.state.name} onChange={this.handleNameChange} />
                 <Form.Text className="text-muted">
                   Es el nombre de tu causa
                 </Form.Text>
               </Form.Group>
               <Form.Group>
                 <Form.Label>Descripcion</Form.Label>
-                <Form.Control type="text" placeholder="Ingresa la descripción" />
+                <Form.Control type="text" placeholder="Ingresa la descripción" value={this.state.detail} onChange={this.handleDetailChange} />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Monto</Form.Label>
-                <Form.Control type="number" placeholder="Ingresa el monto a recaudar en la campaña" />
+                <Form.Control type="number" placeholder="Ingresa el monto a recaudar en la campaña" value={this.state.goal_amount} onChange={this.handleGoalAmountChange} />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Contribuyentes <Button variant="link" onClick={this.openInvitationModal}>Agregar</Button></Form.Label>
@@ -92,4 +117,4 @@ class CampaignNew extends React.Component {
   }
 }
 
-export default CampaignNew;
+export default withRouter(CampaignNew);

@@ -1,29 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 
-const beneficiaries = [
-  {
-    id: '1',
-    name: 'Roberto Carlos',
-    surname: 'Carlos',
-    dni: '33433431',
-  },
-  {
-    id: 2,
-    name: 'Miguel',
-    surname: 'Paez',
-    dni: 23232322,
-    picture: ''
-  }
-];
-
-const campaign = {
-  id: 1,
-  detail: '',
-  amount: 21123,
-  beneficiaries
-}
-
 class BeneficiariesList extends React.Component {
   render() {
     return (
@@ -31,8 +8,7 @@ class BeneficiariesList extends React.Component {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
+            <th>Nombre y Apellido</th>
             <th>DNI</th>
           </tr>
         </thead>
@@ -46,10 +22,7 @@ class BeneficiariesList extends React.Component {
                 {beneficiary.name}
               </td>
               <td>
-                {beneficiary.surname}
-              </td>
-              <td>
-                {beneficiary.dni}
+                {beneficiary.document_id}
               </td>
             </tr>
           ))}

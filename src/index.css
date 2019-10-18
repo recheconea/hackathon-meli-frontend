@@ -25,6 +25,6 @@ code {
   padding-top: 25px;
 }
 
-.campaign-edit .row:first-of-type {
-  padding-bottom: 15px;
+.campaign-edit .row {
+  margin-bottom: 15px;
 }

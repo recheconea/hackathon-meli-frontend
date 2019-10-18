@@ -7,7 +7,7 @@ import CampaignListComponent from '../Components/CampaignList';
 import axios from 'axios';
 import {
   withRouter
-} from 'react-router-dom'
+} from 'react-router-dom';
 
 const campaigns = [
   {

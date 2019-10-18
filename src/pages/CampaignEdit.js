@@ -38,17 +38,23 @@ class CampaignEdit extends React.Component {
     this.state = {
       showModal: false,
       showActivationModal: false,
-      campaign: {},
+      campaign: {
+        beneficiaries: []
+      },
     };
     this.openAddBeneficiary = this.openAddBeneficiary.bind(this);
     this.addBeneficiary = this.addBeneficiary.bind(this);
     this.activate = this.activate.bind(this);
     this.showActivateModal = this.showActivateModal.bind(this);
+    this.save = this.save.bind(this);
   }
 
   componentDidMount() {
-    // TODO: API call to get campaign data
-    this.setState({ campaign: campaign });
+    const urlParams = new URLSearchParams(window.location.search);
+    const campaignId = urlParams.get('campaign_id');
+    Axios.get(`http://80cf2514.ngrok.io/campaigns/?campaign_id=${campaignId}`).then(response => {
+      this.setState({ campaign: response.data[0] });
+    })
   }
 
   openAddBeneficiary() {
@@ -56,14 +62,17 @@ class CampaignEdit extends React.Component {
   }
   
   addBeneficiary(beneficiary) {
-    const campaignCopy = Object.assign({}, campaign);
-    campaignCopy.beneficiaries.push(beneficiary);
-    this.setState({ campaign: campaignCopy });
+    const campaignCopy = Object.assign({}, this.state.campaign);
+    if (campaignCopy.beneficiaries) {
+      campaignCopy.beneficiaries.push(beneficiary)
+    } else {
+      campaignCopy.beneficiaries = new Array(beneficiary);
+    }
+    this.setState({ campaign: campaignCopy, showModal: false });
   }
 
   showActivateModal() {
     this.setState({ showActivationModal: true });
-    //TODO: do api call to activate campaign
   }
   
   activate() {
@@ -74,9 +83,11 @@ class CampaignEdit extends React.Component {
     const beneficiaries = this.state.campaign.beneficiaries.map(beneficiary => ({
       document_id: beneficiary.dni,
       name: beneficiary.name,
-      transaction_pin: beneficiary.pin
+      transaction_pin: beneficiary.pin,
+      picture: beneficiary.photo.replace('data:image/png;base64,', '')
     }));
-    Axios.post(`localhost:8080/campaigns/${this.state.campaign.id}/assignation`, beneficiaries).then(response => {
+    
+    Axios.post(`http://80cf2514.ngrok.io/campaigns/${this.state.campaign.id}/assignation`, beneficiaries).then(response => {
       console.log('saved');
     }).catch(err => console.log(err));
   }
@@ -85,9 +96,12 @@ class CampaignEdit extends React.Component {
     return (
       <Container className="campaign-edit">
         <Row>
+          <h1>Agrega beneficiarios</h1>
+        </Row>
+        <Row>
           <Col md="10"></Col>
           <Col md="2">
-            <Button onClick={this.openAddBeneficiary}>Agregar</Button>
+            <Button onClick={this.openAddBeneficiary} className="add-button">Agregar</Button>
           </Col>
         </Row>
         <Row>
