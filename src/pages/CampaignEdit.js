@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import BeneficiariesList from '../Components/BeneficiariesList';
 import NewBeneficiaryModal from '../Components/NewBeneficiaryModal';
 import ActivationModal from '../Components/ActivationModal';
+import Axios from 'axios';
 
 const beneficiaries = [
   {
@@ -69,6 +70,17 @@ class CampaignEdit extends React.Component {
     //TODO: do API call
   }
 
+  save() {
+    const beneficiaries = this.state.campaign.beneficiaries.map(beneficiary => ({
+      document_id: beneficiary.dni,
+      name: beneficiary.name,
+      transaction_pin: beneficiary.pin
+    }));
+    Axios.post(`localhost:8080/campaigns/${this.state.campaign.id}/assignation`, beneficiaries).then(response => {
+      console.log('saved');
+    }).catch(err => console.log(err));
+  }
+
   render() {
     return (
       <Container>
@@ -85,7 +97,7 @@ class CampaignEdit extends React.Component {
           <Col md="9"></Col>
           <Col md="3">
             <ButtonGroup>
-              <Button variant="primary" onClick={this.showActivateModal}>Activar</Button>
+              <Button variant="primary" onClick={this.save}>Guardar</Button>
               <Button variant="danger">Cancelar</Button>
             </ButtonGroup>
           </Col>

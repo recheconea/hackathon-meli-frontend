@@ -13,6 +13,7 @@ import {
 import CampaignEdit from './pages/CampaignEdit';
 import CampaignList from './pages/CampaignList';
 import CampaignNew from './pages/CampaignNew';
+import ContributorNew from './pages/ContributorNew';
 
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
             </Route>
             <Route path="/">
               <CampaignList />
+            </Route>
+            <Route path="/contributor/">
+              <ContributorNew />
             </Route>
           </Switch>
         </Router>

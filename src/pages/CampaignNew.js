@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InvitationModal from '../Components/InviteModal';
 import ContributorsList from '../Components/ContributorsList';
+import Axios from 'axios';
 
 class CampaignNew extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ class CampaignNew extends React.Component {
 
     this.openInvitationModal = this.openInvitationModal.bind(this);
     this.invite = this.invite.bind(this);
+    this.save = this.save.bind(this);
   }
 
   openInvitationModal() {
@@ -29,6 +31,17 @@ class CampaignNew extends React.Component {
     const contributors = [...this.state.contributors];
     contributors.push(contributor);
     this.setState({ contributors: contributors, showInvitationModal: false });
+  }
+
+  save() {
+    const payload = {
+      id: this.state.id,
+      description: this.state.description,
+      amount: this.state.amount,
+    }
+    Axios.post('localhost:8080/campaigns/', payload).then((response) => {
+      this.props.history.push('/campaign/');
+    })
   }
 
   render() {
@@ -69,7 +82,7 @@ class CampaignNew extends React.Component {
         <Row>
           <Col md="8"></Col>
           <Col md="4">
-            <Button>Guardar</Button>
+            <Button onClick={this.save}>Guardar</Button>
             <Button>Cancelar</Button>
           </Col>
         </Row>

@@ -4,6 +4,10 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CampaignListComponent from '../Components/CampaignList';
+import axios from 'axios';
+import {
+  withRouter
+} from 'react-router-dom'
 
 const campaigns = [
   {
@@ -37,7 +41,15 @@ class CampaignList extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ campaigns });
+    const config = {
+      headers: {'Access-Control-Allow-Origin': '*'}
+    };
+    axios.get('http://80cf2514.ngrok.io/campaigns?user_id=1', config).then((response) => {
+      if (response.data !== '') {
+        const campaigns = response.data;
+        this.setState({ campaigns });
+      }
+    }).catch((err) => console.log(err));
   }
 
   render() {
@@ -52,7 +64,7 @@ class CampaignList extends React.Component {
         <Row>
           <Col md="10"></Col>
           <Col md="2">
-            <Button variant="primary" onClick={this.showActivateModal}>Nueva causa</Button>
+            <Button variant="primary" onClick={() => this.props.history.push('/campaign/new')}>Nueva causa</Button>
           </Col>
         </Row>
       </Container>
@@ -60,4 +72,4 @@ class CampaignList extends React.Component {
   }
 }
 
-export default CampaignList;
+export default withRouter(CampaignList);

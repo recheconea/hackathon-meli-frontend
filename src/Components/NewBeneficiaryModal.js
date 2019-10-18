@@ -2,12 +2,17 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Camera from 'react-html5-camera-photo';
+import 'react-html5-camera-photo/build/css/index.css';
+import PictureModal from './PictureModal';
 
 const cleanBeneficiary = {
   name: '',
   surname: '',
   dni: '',
   pin: '',
+  photo: '',
+  dniPicture: '',
 };
 
 class NewBeneficiaryModal extends React.Component {
@@ -26,6 +31,7 @@ class NewBeneficiaryModal extends React.Component {
     this.handlePinChange = this.handlePinChange.bind(this);
     this.validate = this.validate.bind(this);
     this.clearAll = this.clearAll.bind(this);
+    this.onTakePhoto = this.onTakePhoto.bind(this);
   }
 
   close() {
@@ -43,11 +49,11 @@ class NewBeneficiaryModal extends React.Component {
   }
 
   validate() {
-    debugger
     return this.state.beneficiary.name.trim().length && 
            this.state.beneficiary.surname.trim().length &&
            this.state.beneficiary.dni.length > 4 && this.state.beneficiary.dni.length < 10 &&
-           (this.state.beneficiary.id || this.state.beneficiary.pin.length === 4);
+           (this.state.beneficiary.id || this.state.beneficiary.pin.length === 4) &&
+           this.state.photo.length && this.state.dniPicture.length;
   }
 
   handleDniChange(event) {
@@ -68,6 +74,10 @@ class NewBeneficiaryModal extends React.Component {
 
   clearAll() {
     this.setState({ beneficiary: cleanBeneficiary });
+  }
+
+  onTakePhoto(dataUri) {
+    this.setState({ photo: dataUri, showCamera: false });
   }
 
   componentWillReceiveProps(newProps) {
@@ -102,6 +112,14 @@ class NewBeneficiaryModal extends React.Component {
               <Form.Label>Pin</Form.Label>
               <Form.Control type="password" minLength="4" maxLength="4" placeholder="" value={beneficiary.pin} onChange={this.handlePinChange} isInvalid={!beneficiary.id && beneficiary.pin.length !== 4} />
             </Form.Group>
+            <Form.Group controlId="formFile">
+              <Form.Label>DNI</Form.Label>
+              <Form.Control type="file" placeholder="Ingresa el apellido" value={beneficiary.dniPicture} onChange={this.handleDniPictureChange} isInvalid={beneficiary.dniPicture.trim().length === 0} />
+            </Form.Group>
+            <Form.Group controlID="photoFile" style={{width: '100%'}}>
+              <Form.Label>Foto</Form.Label>
+              <Button onClick={() => this.setState({showCamera: true})}> Tomar foto </Button>
+            </Form.Group>
           </Form>
         </Modal.Body>
 
@@ -109,6 +127,8 @@ class NewBeneficiaryModal extends React.Component {
           <Button variant="secondary" onClick={this.close}>Cancelar</Button>
           <Button variant="primary" onClick={this.save}>Guardar</Button>
         </Modal.Footer>
+
+        <PictureModal onTakePhoto={this.onTakePhoto} show={this.state.showCamera}/>
       </Modal>
     )
   }

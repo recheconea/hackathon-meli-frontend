@@ -45,7 +45,7 @@ class ActivationModal extends React.Component {
             <h2>Beneficiarios</h2>
             <ListGroup variant="flush">
               {
-                campaign.beneficiaries && campaign.beneficiaries.map((beneficiary) => <ListGroup.Item>{beneficiary.name} {beneficiary.surname}</ListGroup.Item>)
+                campaign.beneficiaries && campaign.beneficiaries.map((beneficiary) => <ListGroup.Item key={Math.random()}>{beneficiary.name} {beneficiary.surname}</ListGroup.Item>)
               }
             </ListGroup>
           </ListGroup.Item>
