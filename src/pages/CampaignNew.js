@@ -4,6 +4,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import InvitationModal from '../Components/InviteModal';
+import ContributorsList from '../Components/ContributorsList';
 
 class CampaignNew extends React.Component {
   constructor(props) {
@@ -14,7 +16,21 @@ class CampaignNew extends React.Component {
       description: '',
       amount: '',
     }
+
+    this.openInvitationModal = this.openInvitationModal.bind(this);
+    this.invite = this.invite.bind(this);
   }
+
+  openInvitationModal() {
+    this.setState({ showInvitationModal: true })
+  }
+
+  invite(contributor) {
+    const contributors = [...this.state.contributors];
+    contributors.push(contributor);
+    this.setState({ contributors: contributors, showInvitationModal: false });
+  }
+
   render() {
     return (
       <Container>
@@ -43,7 +59,8 @@ class CampaignNew extends React.Component {
                 <Form.Control type="number" placeholder="Ingresa el monto a recaudar en la campaña" />
               </Form.Group>
               <Form.Group>
-                <Form.Label>Invitar</Form.Label>
+                <Form.Label>Contribuyentes <Button variant="link" onClick={this.openInvitationModal}>Agregar</Button></Form.Label>
+                <ContributorsList contributors={this.state.contributors} />
               </Form.Group>
             </Form>
           </Col>
@@ -56,6 +73,7 @@ class CampaignNew extends React.Component {
             <Button>Cancelar</Button>
           </Col>
         </Row>
+        <InvitationModal show={this.state.showInvitationModal} invite={this.invite}/>
       </Container>
     )
   }

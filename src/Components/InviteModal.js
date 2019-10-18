@@ -8,10 +8,14 @@ class InviteModal extends React.Component {
     super(props);
     this.state = {
       show: this.props.show,
+      name: '',
+      email: '',
     };
 
-    this.invite = this.activate.bind(this);
+    this.invite = this.invite.bind(this);
     this.close = this.close.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
   }
 
   close() {
@@ -20,7 +24,15 @@ class InviteModal extends React.Component {
 
   invite() {
     this.close();
-    this.props.invite();
+    this.props.invite({ name: this.state.name, email: this.state.email });
+  }
+
+  handleNameChange(event) {
+    this.setState({ name: event.target.value });
+  }
+
+  handleEmailChange(event) {
+    this.setState({ email: event.target.value });
   }
 
   componentWillReceiveProps(newProps) {
